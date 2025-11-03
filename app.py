@@ -6,7 +6,7 @@ from decimal import Decimal
 import os # <-- IMPORT THE 'os' MODULE
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY') # <-- CHANGE: Use an environment variable for safety
+app.secret_key = os.environ.get('SECRET_KEY') # <-- CHANGE: Use an environment variable
 
 # --- Database Configuration ---
 # CHANGE: Get database details from environment variables
@@ -358,7 +358,4 @@ def employee_account():
     employee_details = cursor.fetchone()
     cursor.close()
     conn.close()
-    return render_template('employee_account.html', details=employee_details)
-
-# CHANGE: REMOVE THE if __name__ == '__main__': BLOCK
-# The cloud server (Gunicorn) will run the app, so this is no longer needed.
+    return render_template('employee_account..html', details=employee_details)
