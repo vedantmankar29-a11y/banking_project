@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}My Account{% endblock %}
+{% block content %}
+<div class="dialog-box" style="max-width: 600px; margin: auto;">
+    <h2>Your Employee Details</h2>
+    <ul class="details-list">
+        <li><strong>Name:</strong> {{ details.name }}</li>
+        <li><strong>Email:</strong> {{ details.email }}</li>
+        <li><strong>Requests Approved:</strong> {{ details.requests_approved }}</li>
+        <li><strong>Requests Denied:</strong> {{ details.requests_denied }}</li>
+    </ul>
+    <br>
+    <a href="{{ url_for('employee_dashboard') }}" class="btn btn-primary" style="width: auto;">Back to Dashboard</a>
+</div>
+{% endblock %}

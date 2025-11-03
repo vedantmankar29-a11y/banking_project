@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1 style="text-align: center;">Welcome {{ session.user_name }}, to World Peace Bank</h1>
+<div class="dialog-box dashboard-menu">
+    <h2>What would you like to do?</h2>
+    <a href="{{ url_for('view_details') }}" class="btn btn-primary">View Account Details</a>
+    <a href="{{ url_for('transaction', type='deposit') }}" class="btn btn-primary">Deposit Amount</a>
+    <a href="{{ url_for('transaction', type='withdraw') }}" class="btn btn-primary">Withdraw Amount</a>
+    <a href="{{ url_for('apply_loan') }}" class="btn btn-primary">Apply for a Loan</a>
+    <a href="{{ url_for('repay_loan') }}" class="btn btn-primary">Repay Loan</a>
+    <a href="{{ url_for('pending_requests') }}" class="btn btn-primary">Pending Requests</a>
+    <a href="#" onclick="confirmLogout()" class="btn btn-primary" style="background-color: #aaa;">Logout</a>
+    <a href="#" onclick="confirmCloseAccount()" class="btn btn-primary" style="background-color: var(--danger-color);">Close Account</a>
+</div>
+
+<form id="closeAccountForm" action="{{ url_for('close_account') }}" method="POST" style="display: none;"></form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function confirmCloseAccount() {
+        if (confirm("Are you sure you want to permanently close your account? This action cannot be undone.")) {
+            document.getElementById('closeAccountForm').submit();
+        }
+    }
+</script>
+{% endblock %}

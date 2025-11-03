@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Employee Dashboard{% endblock %}
+{% block content %}
+<h1 style="text-align: center;">Welcome Back, {{ session.user_name }} Sir</h1>
+
+<div class="dialog-box">
+    <div class="request-section">
+        <h2>Pending Requests</h2>
+        
+        <h3>Account Opening Applications</h3>
+        {% if account_requests %}
+        <table class="request-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile No.</th>
+                    <th>Deposit</th>
+                    <th>Password</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for req in account_requests %}
+                <tr>
+                    <td>{{ req.first_name }} {{ req.last_name }}</td>
+                    <td>{{ req.email }}</td>
+                    <td>{{ req.mobile_number }}</td>
+                    <td>₹{{ "%.2f"|format(req.starting_deposit) }}</td>
+                    <td>
+                        <div class="password-wrapper">
+                            <input type="password" id="password-{{ req.request_id }}" value="{{ req.password }}" readonly style="border:none; background:transparent; width: 100px;">
+                            <span class="password-toggle" onclick="togglePasswordVisibility('password-{{ req.request_id }}')"><i class="fas fa-eye"></i></span>
+                        </div>
+                    </td>
+                    <td>
+                        <form action="{{ url_for('handle_account_request', request_id=req.request_id, action='approve') }}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-primary" style="width:auto; padding: 5px 10px; background-color:var(--success-color);">Approve</button>
+                        </form>
+                        <form action="{{ url_for('handle_account_request', request_id=req.request_id, action='deny') }}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-primary" style="width:auto; padding: 5px 10px; background-color:var(--danger-color);">Deny</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p>No pending account applications.</p>{% endif %}
+
+        <h3 style="margin-top: 2rem;">Loan Applications</h3>
+        {% if loan_requests %}
+         <table class="request-table">
+            <thead><tr><th>Account #</th><th>Name</th><th>Amount</th><th>Tenure (Yrs)</th><th>Interest Rate (%)</th><th>Actions</th></tr></thead>
+            <tbody>
+            {% for req in loan_requests %}
+                <tr>
+                    <td>{{ req.account_number }}</td>
+                    <td>{{ req.first_name }} {{ req.last_name }}</td>
+                    <td>₹{{ "%.2f"|format(req.amount) }}</td>
+                    <td>{{ req.tenure }}</td>
+                    <td>{{ req.interest_rate }}%</td>
+                    <td>
+                        <form action="{{ url_for('handle_loan_request', loan_id=req.loan_id, action='approve') }}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-primary" style="width:auto; padding: 5px 10px; background-color:var(--success-color);">Approve</button>
+                        </form>
+                        <form action="{{ url_for('handle_loan_request', loan_id=req.loan_id, action='deny') }}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-primary" style="width:auto; padding: 5px 10px; background-color:var(--danger-color);">Deny</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p>No pending loan applications.</p>{% endif %}
+    </div>
+
+    <div class="request-section">
+        <hr style="margin: 2rem 0;">
+        <h2>Completed Requests</h2>
+        
+        <h3>Account Applications</h3>
+        <table class="request-table">
+            <thead>
+                <tr>
+                    <th>Assigned Account No.</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile No.</th>
+                    <th>Deposit</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for req in completed_account_requests %}
+                <tr>
+                    <td>{% if req.account_number %}{{ req.account_number }}{% else %}N/A{% endif %}</td>
+                    <td>{{ req.first_name }} {{ req.last_name }}</td>
+                    <td>{{ req.email }}</td>
+                    <td>{{ req.mobile_number }}</td>
+                    <td>₹{{ "%.2f"|format(req.starting_deposit) }}</td>
+                    <td class="status-{{ req.status }}">{{ req.status|capitalize }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="6">No completed account applications.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <h3 style="margin-top: 2rem;">Loan Applications</h3>
+        <table class="request-table">
+            <thead><tr><th>Account #</th><th>Name</th><th>Amount</th><th>Tenure (Yrs)</th><th>Interest Rate (%)</th><th>Status</th></tr></thead>
+            <tbody>
+            {% for req in completed_loan_requests %}
+                <tr>
+                    <td>{{ req.account_number }}</td>
+                    <td>{{ req.first_name }} {{ req.last_name }}</td>
+                    <td>₹{{ "%.2f"|format(req.amount) }}</td>
+                    <td>{{ req.tenure }}</td>
+                    <td>{{ req.interest_rate }}%</td>
+                    <td class="status-{{ req.status }}">{{ req.status|capitalize }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="6">No completed loan applications.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

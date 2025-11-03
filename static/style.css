@@ -1,0 +1,282 @@
+/* --- General Body & Theme --- */
+:root {
+    --primary-color: #005A9C; /* A strong blue */
+    --secondary-color: #4A90E2; /* A lighter, friendly blue */
+    --accent-color: #F5A623; /* A contrasting accent (optional, for highlights) */
+    --light-bg: #F8F9FA; /* Off-white background */
+    --dark-text: #333;
+    --light-text: #FFF;
+    --border-color: #DDD;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--light-bg);
+    color: var(--dark-text);
+    margin: 0;
+    padding-top: 70px; /* Space for fixed navbar */
+}
+
+/* --- Navbar --- */
+.navbar {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--light-text);
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+.menu-icon {
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: var(--light-text);
+}
+
+/* --- Sidebar --- */
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1001;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidebar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    color: var(--light-text);
+}
+
+.sidebar .closebtn {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+
+/* --- Main Container & Forms --- */
+.container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.form-box {
+    background: #fff;
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+}
+
+.form-box h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    width: 100%;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    color: #777;
+}
+
+/* --- Buttons --- */
+.btn {
+    display: inline-block;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--secondary-color);
+    color: var(--light-text);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.signup-link {
+    text-align: right;
+    margin-top: 1rem;
+}
+
+.signup-link a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* --- Dashboard & Dialog Boxes --- */
+.dashboard-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 500px;
+    margin: auto;
+}
+
+.dashboard-menu .btn {
+    text-align: center;
+    padding: 15px;
+    font-size: 1.1rem;
+}
+
+.dialog-box {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.dialog-box h2, .dialog-box h3 {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--light-bg);
+    padding-bottom: 0.5rem;
+    margin-top: 0;
+}
+
+/* --- Alerts & Flashes --- */
+.flash-messages {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+}
+.flash-messages li {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+.flash-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.flash-danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+.flash-warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+
+
+/* --- Request & Details Tables --- */
+.request-section { margin-bottom: 2rem; }
+.request-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.request-table th, .request-table td {
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    text-align: left;
+}
+.request-table th { background-color: var(--light-bg); }
+.status-pending { font-weight: bold; color: #e67e22; }
+.status-approved { font-weight: bold; color: var(--success-color); }
+.status-denied { font-weight: bold; color: var(--danger-color); }
+
+.details-list {
+    list-style: none;
+    padding: 0;
+}
+.details-list li {
+    font-size: 1.1rem;
+    padding: 10px;
+    border-bottom: 1px solid var(--light-bg);
+}
+.details-list li strong {
+    color: var(--primary-color);
+    margin-right: 10px;
+}
+
+/* --- Captcha --- */
+.captcha-box {
+    background: #eee;
+    padding: 10px;
+    text-align: center;
+    border-radius: 8px;
+    letter-spacing: 5px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: line-through;
+    color: #555;
+    margin-bottom: 1rem;
+}

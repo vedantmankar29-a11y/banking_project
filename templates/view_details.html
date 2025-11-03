@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Account Details{% endblock %}
+{% block content %}
+<div class="dialog-box" style="max-width: 800px; margin: auto;">
+    <h2>Your Account Details</h2>
+    <ul class="details-list">
+        <li><strong>Account Number:</strong> {{ details.account_number }}</li>
+        <li><strong>Name:</strong> {{ details.first_name }} {{ details.last_name }}</li>
+        <li><strong>Email:</strong> {{ details.email }}</li>
+        <li><strong>Mobile Number:</strong> {{ details.mobile_number }}</li>
+        <li><strong>Account Balance:</strong> ₹{{ "%.2f"|format(details.balance) }}</li>
+        <li>
+            <strong>Pending Dues:</strong> ₹{{ "%.2f"|format(total_dues) }}
+            {% if total_dues > 0 %}
+            <a href="{{ url_for('repay_loan') }}" class="btn btn-primary" style="width: auto; padding: 5px 10px; margin-left: 20px; font-size: 0.9rem;">Repay Loan</a>
+            {% endif %}
+        </li>
+    </ul>
+
+    <h3>Active Loans</h3>
+    {% if loans %}
+    <table class="request-table">
+        <thead>
+            <tr>
+                <th>Loan ID</th>
+                <th>Total Repayment</th>
+                <th>Repayment Left</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for loan in loans %}
+            <tr>
+                <td>{{ loan.loan_id }}</td>
+                <td>₹{{ "%.2f"|format(loan.total_repayment) }}</td>
+                <td>
+                    {% if (loan.total_repayment - loan.repayment_paid) > 0 %}
+                        ₹{{ "%.2f"|format(loan.total_repayment - loan.repayment_paid) }}
+                    {% else %}
+                        <span class="status-approved">Repaid</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>You have no active loans.</p>
+    {% endif %}
+    <br>
+    <a href="{{ url_for('customer_dashboard') }}" class="btn btn-primary" style="width: auto;">Back to Dashboard</a>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Repay Loan{% endblock %}
+{% block content %}
+<div class="dialog-box" style="max-width: 1000px; margin: auto;">
+    <h2>Repay Your Active Loans</h2>
+    
+    {% if loans %}
+    <table class="request-table">
+        <thead>
+            <tr>
+                <th>Loan ID</th>
+                <th>Total Repayment</th>
+                <th>Repayment Left</th>
+                <th>Repay Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for loan in loans %}
+            <tr>
+                <td>{{ loan.loan_id }}</td>
+                <td>₹{{ "%.2f"|format(loan.total_repayment) }}</td>
+                <td>₹{{ "%.2f"|format(loan.repayment_left) }}</td>
+                <td>
+                    {% if loan.repayment_left > 0 %}
+                    <form action="{{ url_for('repay_loan') }}" method="post" style="display: flex; gap: 10px; align-items: center;">
+                        <input type="hidden" name="loan_id" value="{{ loan.loan_id }}">
+                        <input type="number" name="amount" min="0.01" step="0.01" max="{{ loan.repayment_left }}" class="form-control" style="width: 150px;" required>
+                        <button type="submit" class="btn btn-primary" style="width: auto; padding: 8px 12px;">Repay</button>
+                    </form>
+                    {% else %}
+                    <span class="status-approved">Repaid</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>You have no active loans to repay.</p>
+    {% endif %}
+    
+    <a href="{{ url_for('customer_dashboard') }}" class="btn btn-primary" style="width: auto; margin-top: 2rem;">Back to Dashboard</a>
+</div>
+{% endblock %}
