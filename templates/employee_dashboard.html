@@ -7,8 +7,9 @@
     <div class="request-section">
         <h2>Pending Requests</h2>
         
-        <h3>Account Opening Applications</h3>
+        <h3><i class="fas fa-user-plus"></i> Account Opening Applications</h3>
         {% if account_requests %}
+        <div class="table-responsive">
         <table class="request-table">
             <thead>
                 <tr>
@@ -34,21 +35,25 @@
                         </div>
                     </td>
                     <td>
-                        <form action="{{ url_for('handle_account_request', request_id=req.request_id, action='approve') }}" method="post" style="display:inline;">
-                            <button type="submit" class="btn btn-primary" style="width:auto; padding: 5px 10px; background-color:var(--success-color);">Approve</button>
-                        </form>
-                        <form action="{{ url_for('handle_account_request', request_id=req.request_id, action='deny') }}" method="post" style="display:inline;">
-                            <button type="submit" class="btn btn-primary" style="width:auto; padding: 5px 10px; background-color:var(--danger-color);">Deny</button>
-                        </form>
+                        <div class="action-buttons">
+                            <form action="{{ url_for('handle_account_request', request_id=req.request_id, action='approve') }}" method="post">
+                                <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check"></i></button>
+                            </form>
+                            <form action="{{ url_for('handle_account_request', request_id=req.request_id, action='deny') }}" method="post">
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-times"></i></button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-        {% else %}<p>No pending account applications.</p>{% endif %}
+        </div>
+        {% else %}<p style="color:var(--text-muted);">No pending account applications.</p>{% endif %}
 
-        <h3 style="margin-top: 2rem;">Loan Applications</h3>
+        <h3 style="margin-top: 2rem;"><i class="fas fa-hand-holding-usd"></i> Loan Applications</h3>
         {% if loan_requests %}
+         <div class="table-responsive">
          <table class="request-table">
             <thead><tr><th>Account #</th><th>Name</th><th>Amount</th><th>Tenure (Yrs)</th><th>Interest Rate (%)</th><th>Actions</th></tr></thead>
             <tbody>
@@ -60,25 +65,61 @@
                     <td>{{ req.tenure }}</td>
                     <td>{{ req.interest_rate }}%</td>
                     <td>
-                        <form action="{{ url_for('handle_loan_request', loan_id=req.loan_id, action='approve') }}" method="post" style="display:inline;">
-                            <button type="submit" class="btn btn-primary" style="width:auto; padding: 5px 10px; background-color:var(--success-color);">Approve</button>
-                        </form>
-                        <form action="{{ url_for('handle_loan_request', loan_id=req.loan_id, action='deny') }}" method="post" style="display:inline;">
-                            <button type="submit" class="btn btn-primary" style="width:auto; padding: 5px 10px; background-color:var(--danger-color);">Deny</button>
-                        </form>
+                        <div class="action-buttons">
+                            <form action="{{ url_for('handle_loan_request', loan_id=req.loan_id, action='approve') }}" method="post">
+                                <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check"></i></button>
+                            </form>
+                            <form action="{{ url_for('handle_loan_request', loan_id=req.loan_id, action='deny') }}" method="post">
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-times"></i></button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-        {% else %}<p>No pending loan applications.</p>{% endif %}
+        </div>
+        {% else %}<p style="color:var(--text-muted);">No pending loan applications.</p>{% endif %}
+    </div>
+
+    <div class="request-section">
+        <h2><i class="fas fa-users"></i> Active Customers</h2>
+        <div class="table-responsive">
+        <table class="request-table">
+            <thead>
+                <tr>
+                    <th>Account #</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Mobile Number</th>
+                    <th>Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for customer in active_customers %}
+                <tr>
+                    <td>{{ customer.account_number }}</td>
+                    <td>{{ customer.first_name }}</td>
+                    <td>{{ customer.last_name }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td>{{ customer.mobile_number }}</td>
+                    <td>₹{{ "%.2f"|format(customer.balance) }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No active customers found.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
     </div>
 
     <div class="request-section">
         <hr style="margin: 2rem 0;">
         <h2>Completed Requests</h2>
         
-        <h3>Account Applications</h3>
+        <h3><i class="fas fa-folder-open"></i> Account Applications</h3>
+        <div class="table-responsive">
         <table class="request-table">
             <thead>
                 <tr>
@@ -98,15 +139,17 @@
                     <td>{{ req.email }}</td>
                     <td>{{ req.mobile_number }}</td>
                     <td>₹{{ "%.2f"|format(req.starting_deposit) }}</td>
-                    <td class="status-{{ req.status }}">{{ req.status|capitalize }}</td>
+                    <td class="status-{{ req.status }}"><span class="badge status-{{ req.status }}">{{ req.status|capitalize }}</span></td>
                 </tr>
             {% else %}
                 <tr><td colspan="6">No completed account applications.</td></tr>
             {% endfor %}
             </tbody>
         </table>
+        </div>
 
-        <h3 style="margin-top: 2rem;">Loan Applications</h3>
+        <h3 style="margin-top: 2rem;"><i class="fas fa-money-bill-wave"></i> Loan Applications</h3>
+        <div class="table-responsive">
         <table class="request-table">
             <thead><tr><th>Account #</th><th>Name</th><th>Amount</th><th>Tenure (Yrs)</th><th>Interest Rate (%)</th><th>Status</th></tr></thead>
             <tbody>
@@ -117,13 +160,14 @@
                     <td>₹{{ "%.2f"|format(req.amount) }}</td>
                     <td>{{ req.tenure }}</td>
                     <td>{{ req.interest_rate }}%</td>
-                    <td class="status-{{ req.status }}">{{ req.status|capitalize }}</td>
+                    <td class="status-{{ req.status }}"><span class="badge status-{{ req.status }}">{{ req.status|capitalize }}</span></td>
                 </tr>
             {% else %}
                 <tr><td colspan="6">No completed loan applications.</td></tr>
             {% endfor %}
             </tbody>
         </table>
+        </div>
     </div>
 </div>
 {% endblock %}

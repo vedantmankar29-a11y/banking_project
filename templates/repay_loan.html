@@ -2,9 +2,10 @@
 {% block title %}Repay Loan{% endblock %}
 {% block content %}
 <div class="dialog-box" style="max-width: 1000px; margin: auto;">
-    <h2>Repay Your Active Loans</h2>
+    <h2><i class="fas fa-money-check-alt"></i> Repay Your Active Loans</h2>
     
     {% if loans %}
+    <div class="table-responsive">
     <table class="request-table">
         <thead>
             <tr>
@@ -35,6 +36,7 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
     {% else %}
     <p>You have no active loans to repay.</p>
     {% endif %}

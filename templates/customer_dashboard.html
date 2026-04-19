@@ -1,17 +1,41 @@
 {% extends "base.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<h1 style="text-align: center;">Welcome {{ session.user_name }}, to World Peace Bank</h1>
-<div class="dialog-box dashboard-menu">
-    <h2>What would you like to do?</h2>
-    <a href="{{ url_for('view_details') }}" class="btn btn-primary">View Account Details</a>
-    <a href="{{ url_for('transaction', type='deposit') }}" class="btn btn-primary">Deposit Amount</a>
-    <a href="{{ url_for('transaction', type='withdraw') }}" class="btn btn-primary">Withdraw Amount</a>
-    <a href="{{ url_for('apply_loan') }}" class="btn btn-primary">Apply for a Loan</a>
-    <a href="{{ url_for('repay_loan') }}" class="btn btn-primary">Repay Loan</a>
-    <a href="{{ url_for('pending_requests') }}" class="btn btn-primary">Pending Requests</a>
-    <a href="#" onclick="confirmLogout()" class="btn btn-primary" style="background-color: #aaa;">Logout</a>
-    <a href="#" onclick="confirmCloseAccount()" class="btn btn-primary" style="background-color: var(--danger-color);">Close Account</a>
+<h1 style="text-align: center; margin-bottom: 2rem;">Welcome, {{ session.user_name }}</h1>
+
+<div class="dashboard-grid">
+    <a href="{{ url_for('view_details') }}" class="dashboard-card">
+        <i class="fas fa-id-card"></i>
+        <h3>View Account Details</h3>
+    </a>
+    <a href="{{ url_for('transaction', type='deposit') }}" class="dashboard-card">
+        <i class="fas fa-arrow-circle-down"></i>
+        <h3>Deposit Amount</h3>
+    </a>
+    <a href="{{ url_for('transaction', type='withdraw') }}" class="dashboard-card">
+        <i class="fas fa-arrow-circle-up"></i>
+        <h3>Withdraw Amount</h3>
+    </a>
+    <a href="{{ url_for('apply_loan') }}" class="dashboard-card">
+        <i class="fas fa-hand-holding-usd"></i>
+        <h3>Apply for a Loan</h3>
+    </a>
+    <a href="{{ url_for('repay_loan') }}" class="dashboard-card">
+        <i class="fas fa-money-check-alt"></i>
+        <h3>Repay Loan</h3>
+    </a>
+    <a href="{{ url_for('pending_requests') }}" class="dashboard-card">
+        <i class="fas fa-clock"></i>
+        <h3>Pending Requests</h3>
+    </a>
+    <a href="#" onclick="confirmLogout()" class="dashboard-card btn-neutral">
+        <i class="fas fa-sign-out-alt"></i>
+        <h3>Logout</h3>
+    </a>
+    <a href="#" onclick="confirmCloseAccount()" class="dashboard-card danger">
+        <i class="fas fa-user-times"></i>
+        <h3>Close Account</h3>
+    </a>
 </div>
 
 <form id="closeAccountForm" action="{{ url_for('close_account') }}" method="POST" style="display: none;"></form>

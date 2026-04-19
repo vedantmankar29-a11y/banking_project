@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% block title %}Login - World Peace Bank{% endblock %}
 {% block content %}
-<h1 style="text-align: center; color: var(--primary-color);">Welcome to World Peace Bank</h1>
+<h1 style="text-align: center; margin-bottom: 0.5rem;"><i class="fas fa-university" style="color:var(--secondary-color);"></i> World Peace Bank</h1>
+<p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Secure, reliable, and modern banking.</p>
 <div class="login-container">
     <div class="form-box">
-        <h2>Customer Login</h2>
+        <h2><i class="fas fa-user-lock"></i> Customer Login</h2>
         <form action="{{ url_for('customer_login') }}" method="post">
             <div class="form-group">
                 <label for="email">Email ID</label>
@@ -30,7 +31,7 @@
     </div>
 
     <div class="form-box">
-        <h2>Employee Login</h2>
+        <h2><i class="fas fa-user-tie"></i> Employee Login</h2>
         <form action="{{ url_for('employee_login') }}" method="post">
             <div class="form-group">
                 <label for="email">Email</label>

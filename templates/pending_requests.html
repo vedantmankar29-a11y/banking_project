@@ -2,10 +2,11 @@
 {% block title %}Pending Requests{% endblock %}
 {% block content %}
 <div class="dialog-box" style="max-width: 1000px; margin:auto;">
-    <h2>Your Loan Requests</h2>
+    <h2><i class="fas fa-clock"></i> Your Loan Requests</h2>
 
     <div class="request-section">
-        <h3>Pending Applications</h3>
+        <h3><i class="fas fa-hourglass-half"></i> Pending Applications</h3>
+        <div class="table-responsive">
         <table class="request-table">
             <thead>
                 <tr><th>Loan ID</th><th>Amount</th><th>Status</th></tr>
@@ -15,17 +16,19 @@
                 <tr>
                     <td>{{ req.loan_id }}</td>
                     <td>₹{{ "%.2f"|format(req.amount) }}</td>
-                    <td class="status-pending">{{ req.status|capitalize }}</td>
+                    <td class="status-pending"><span class="badge status-pending">{{ req.status|capitalize }}</span></td>
                 </tr>
                 {% else %}
                 <tr><td colspan="3">No pending loan applications found.</td></tr>
                 {% endfor %}
             </tbody>
         </table>
+        </div>
     </div>
 
     <div class="request-section">
-        <h3>Completed Applications</h3>
+        <h3><i class="fas fa-check-circle"></i> Completed Applications</h3>
+        <div class="table-responsive">
         <table class="request-table">
             <thead>
                 <tr><th>Loan ID</th><th>Amount</th><th>Status</th></tr>
@@ -35,13 +38,14 @@
                 <tr>
                     <td>{{ req.loan_id }}</td>
                     <td>₹{{ "%.2f"|format(req.amount) }}</td>
-                    <td class="status-{{ req.status }}">{{ req.status|capitalize }}</td>
+                    <td class="status-{{ req.status }}"><span class="badge status-{{ req.status }}">{{ req.status|capitalize }}</span></td>
                 </tr>
                 {% else %}
                 <tr><td colspan="3">No completed loan applications found.</td></tr>
                 {% endfor %}
             </tbody>
         </table>
+        </div>
     </div>
      <a href="{{ url_for('customer_dashboard') }}" class="btn btn-primary" style="width: auto; margin-top: 1rem;">Back to Dashboard</a>
 </div>

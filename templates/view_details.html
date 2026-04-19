@@ -2,7 +2,7 @@
 {% block title %}Account Details{% endblock %}
 {% block content %}
 <div class="dialog-box" style="max-width: 800px; margin: auto;">
-    <h2>Your Account Details</h2>
+    <h2><i class="fas fa-address-card"></i> Your Account Details</h2>
     <ul class="details-list">
         <li><strong>Account Number:</strong> {{ details.account_number }}</li>
         <li><strong>Name:</strong> {{ details.first_name }} {{ details.last_name }}</li>
@@ -17,8 +17,9 @@
         </li>
     </ul>
 
-    <h3>Active Loans</h3>
+    <h3><i class="fas fa-file-invoice-dollar"></i> Active Loans</h3>
     {% if loans %}
+    <div class="table-responsive">
     <table class="request-table">
         <thead>
             <tr>
@@ -43,6 +44,7 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
     {% else %}
     <p>You have no active loans.</p>
     {% endif %}

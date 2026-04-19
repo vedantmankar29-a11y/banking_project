@@ -4,6 +4,10 @@ import random
 import string
 from decimal import Decimal
 import os # <-- IMPORT THE 'os' MODULE
+from dotenv import load_dotenv
+from werkzeug.security import generate_password_hash, check_password_hash
+
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY') # <-- CHANGE: Use an environment variable
@@ -73,11 +77,12 @@ def customer_login():
         return redirect(url_for('home'))
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM customers WHERE email = %s AND password = %s", (email, password))
+    cursor.execute("SELECT * FROM customers WHERE email = %s", (email,))
     customer = cursor.fetchone()
     cursor.close()
     conn.close()
-    if customer:
+    
+    if customer and check_password_hash(customer['password'], password):
         session['user_id'] = customer['account_number']
         session['user_name'] = f"{customer['first_name']} {customer['last_name']}"
         session['user_type'] = 'customer'
@@ -94,7 +99,7 @@ def signup():
         mobile_number = request.form['mobile_number']
         email = request.form['email']
         starting_deposit = request.form['starting_deposit']
-        password = request.form['password']
+        password = generate_password_hash(request.form['password'])
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM customers WHERE first_name = %s AND last_name = %s AND mobile_number = %s AND email = %s", (first_name, last_name, mobile_number, email))
@@ -266,18 +271,29 @@ def employee_login():
     password = request.form['password']
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM employees WHERE email = %s AND password = %s", (email, password))
+    cursor.execute("SELECT * FROM employees WHERE email = %s", (email,))
     employee = cursor.fetchone()
+    
+    if employee:
+        is_valid = check_password_hash(employee['password'], password)
+        if not is_valid and employee['password'] == password:
+            new_hash = generate_password_hash(password)
+            cursor.execute("UPDATE employees SET password = %s WHERE id = %s", (new_hash, employee['id']))
+            conn.commit()
+            is_valid = True
+            
+        if is_valid:
+            session['user_id'] = employee['id']
+            session['user_name'] = employee['name']
+            session['user_type'] = 'employee'
+            cursor.close()
+            conn.close()
+            return redirect(url_for('employee_dashboard'))
+            
     cursor.close()
     conn.close()
-    if employee:
-        session['user_id'] = employee['id']
-        session['user_name'] = employee['name']
-        session['user_type'] = 'employee'
-        return redirect(url_for('employee_dashboard'))
-    else:
-        flash('Invalid Employee Credentials.', 'danger')
-        return redirect(url_for('home'))
+    flash('Invalid Employee Credentials.', 'danger')
+    return redirect(url_for('home'))
         
 @app.route('/employee/dashboard')
 def employee_dashboard():
@@ -293,9 +309,12 @@ def employee_dashboard():
     completed_account_reqs = cursor.fetchall()
     cursor.execute("SELECT l.*, c.first_name, c.last_name FROM loans l JOIN customers c ON l.account_number = c.account_number WHERE l.status != 'pending'")
     completed_loan_reqs = cursor.fetchall()
+    cursor.execute("SELECT * FROM customers ORDER BY account_number ASC")
+    active_customers = cursor.fetchall()
+    
     cursor.close()
     conn.close()
-    return render_template('employee_dashboard.html', account_requests=account_reqs, loan_requests=loan_reqs, completed_account_requests=completed_account_reqs, completed_loan_requests=completed_loan_reqs)
+    return render_template('employee_dashboard.html', account_requests=account_reqs, loan_requests=loan_reqs, completed_account_requests=completed_account_reqs, completed_loan_requests=completed_loan_reqs, active_customers=active_customers)
 
 @app.route('/employee/handle_account_request/<int:request_id>/<action>', methods=['POST'])
 def handle_account_request(request_id, action):
@@ -358,4 +377,7 @@ def employee_account():
     employee_details = cursor.fetchone()
     cursor.close()
     conn.close()
-    return render_template('employee_account..html', details=employee_details)
+    return render_template('employee_account.html', details=employee_details)
+
+if __name__ == '__main__':
+    app.run(debug=True)

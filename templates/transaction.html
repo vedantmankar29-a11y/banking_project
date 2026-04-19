@@ -3,7 +3,7 @@
 {% block content %}
 <div style="max-width: 500px; margin: auto;">
     <div class="form-box">
-        <h2>{{ type }} Amount</h2>
+        <h2><i class="fas fa-exchange-alt"></i> {{ type }} Amount</h2>
         <form action="{{ url_for('transaction', type=type.lower()) }}" method="post">
             <div class="form-group">
                 <label for="amount">Amount (INR)</label>
